@@ -1,32 +1,13 @@
-from selenium import webdriver
 from selenium.webdriver.support.select import Select
 
 
-class Application:
+class ContactHelper:
 
-    def __init__(self):
-        self.dw = webdriver.Chrome()
-        self.dw.implicitly_wait(30)
+    def __init__(self, app):
+        self.app = app
 
-    def login(self, username, password):
-        dw = self.dw
-        dw.get("http://localhost:8080/addressbook/index.php")
-        dw.find_element_by_name("user").send_keys(username)
-        dw.find_element_by_name("pass").send_keys(password)
-        dw.find_element_by_xpath("//input[@value='Login']").click()
-
-    def create_group(self, group):
-        dw = self.dw
-        dw.find_element_by_link_text("groups").click()
-        dw.find_element_by_name("new").click()
-        dw.find_element_by_name("group_name").send_keys(group.name)
-        dw.find_element_by_name("group_header").send_keys(group.header)
-        dw.find_element_by_name("group_footer").send_keys(group.footer)
-        dw.find_element_by_name("submit").click()
-        dw.find_element_by_link_text("groups").click()
-
-    def create_contact(self, contact):
-        dw = self.dw
+    def create(self, contact):
+        dw = self.app.dw
         dw.find_element_by_link_text("add new").click()
         dw.find_element_by_name("firstname").send_keys(contact.firstname)
         dw.find_element_by_name("middlename").send_keys(contact.middlename)
@@ -51,10 +32,3 @@ class Application:
         dw.find_element_by_name("byear").send_keys(contact.byear)
         dw.find_element_by_xpath("(//input[@name='submit'])[2]").click()
         dw.find_element_by_link_text("home").click()
-
-    def logout(self):
-        dw = self.dw
-        dw.find_element_by_link_text("Logout").click()
-
-    def destroy(self):
-        self.dw.quit()
