@@ -12,13 +12,23 @@ class GroupHelper:
         dw = self.app.dw
         dw.find_element_by_link_text("group page").click()
 
+    def fill_form(self, group):
+        dw = self.app.dw
+        dw.find_element_by_name("group_name").send_keys(group.name)
+        dw.find_element_by_name("group_header").send_keys(group.header)
+        dw.find_element_by_name("group_footer").send_keys(group.footer)
+
+    def clear_fields(self):
+        dw = self.app.dw
+        dw.find_element_by_name("group_name").clear()
+        dw.find_element_by_name("group_header").clear()
+        dw.find_element_by_name("group_footer").clear()
+
     def create(self, group):
         dw = self.app.dw
         self.open_group_page()
         dw.find_element_by_name("new").click()
-        dw.find_element_by_name("group_name").send_keys(group.name)
-        dw.find_element_by_name("group_header").send_keys(group.header)
-        dw.find_element_by_name("group_footer").send_keys(group.footer)
+        self.fill_form(group)
         dw.find_element_by_name("submit").click()
         self.return_to_groups_page()
 
@@ -34,11 +44,7 @@ class GroupHelper:
         self.open_group_page()
         dw.find_element_by_name("selected[]").click()
         dw.find_element_by_name("edit").click()
-        dw.find_element_by_name("group_name").clear()
-        dw.find_element_by_name("group_header").clear()
-        dw.find_element_by_name("group_footer").clear()
-        dw.find_element_by_name("group_name").send_keys(group.name)
-        dw.find_element_by_name("group_header").send_keys(group.header)
-        dw.find_element_by_name("group_footer").send_keys(group.footer)
+        self.clear_fields()
+        self.fill_form(group)
         dw.find_element_by_name("update").click()
         self.return_to_groups_page()
