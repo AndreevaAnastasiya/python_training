@@ -12,17 +12,20 @@ class GroupHelper:
         dw = self.app.dw
         dw.find_element_by_link_text("group page").click()
 
-    def fill_form(self, group):
+    def select_first(self):
         dw = self.app.dw
-        dw.find_element_by_name("group_name").send_keys(group.name)
-        dw.find_element_by_name("group_header").send_keys(group.header)
-        dw.find_element_by_name("group_footer").send_keys(group.footer)
+        dw.find_element_by_name("selected[]").click()
 
-    def clear_fields(self):
+    def change_field(self, field_name, text):
         dw = self.app.dw
-        dw.find_element_by_name("group_name").clear()
-        dw.find_element_by_name("group_header").clear()
-        dw.find_element_by_name("group_footer").clear()
+        if text is not None:
+            dw.find_element_by_name(field_name).clear()
+            dw.find_element_by_name(field_name).send_keys(text)
+
+    def fill_form(self, group):
+        self.change_field("group_name", group.name)
+        self.change_field("group_header", group.header)
+        self.change_field("group_footer", group.footer)
 
     def create(self, group):
         dw = self.app.dw
@@ -35,16 +38,15 @@ class GroupHelper:
     def delete_first(self):
         dw = self.app.dw
         self.open_group_page()
-        dw.find_element_by_name("selected[]").click()
+        self.select_first()
         dw.find_element_by_name("delete").click()
         self.return_to_groups_page()
 
     def edit_first(self, group):
         dw = self.app.dw
         self.open_group_page()
-        dw.find_element_by_name("selected[]").click()
+        self.select_first()
         dw.find_element_by_name("edit").click()
-        self.clear_fields()
         self.fill_form(group)
         dw.find_element_by_name("update").click()
         self.return_to_groups_page()
