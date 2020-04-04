@@ -6,7 +6,9 @@ class GroupHelper:
 
     def open_group_page(self):
         dw = self.app.dw
-        dw.find_element_by_link_text("groups").click()
+        if not (dw.current_url.endswith("/group.php") and len(
+                dw.find_elements_by_name("new")) > 0):
+            dw.find_element_by_link_text("groups").click()
 
     def return_to_groups_page(self):
         dw = self.app.dw

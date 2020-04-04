@@ -8,7 +8,9 @@ class ContactHelper:
 
     def open_home_page(self):
         dw = self.app.dw
-        dw.find_element_by_xpath("//a[contains(text(), 'home')]").click()
+        if not (dw.current_url.endswith("/index.php") and len(
+                dw.find_elements_by_xpath("//img[@title='Edit']")) > 0):
+            dw.find_element_by_xpath("//a[contains(text(), 'home')]").click()
 
     def return_to_home_page(self):
         dw = self.app.dw
