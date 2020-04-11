@@ -1,3 +1,5 @@
+from models.group import Group
+
 
 class GroupHelper:
 
@@ -57,3 +59,14 @@ class GroupHelper:
         dw = self.app.dw
         self.open_group_page()
         return len(dw.find_elements_by_name("selected[]"))
+
+    def get_group_list(self):
+        dw = self.app.dw
+        self.open_group_page()
+        groups = []
+        for element in dw.find_elements_by_xpath("//span[@class='group']"):
+            text = element.text
+            id = element.find_element_by_name("selected[]").get_attribute(
+                "value")
+            groups.append(Group(name=text, id=id))
+        return groups
