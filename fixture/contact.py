@@ -56,6 +56,7 @@ class ContactHelper:
         self.fill_form(contact)
         dw.find_element_by_xpath("(//input[@name='submit'])[2]").click()
         self.return_to_home_page()
+        self.contact_cache = None
 
     def delete_first(self):
         dw = self.app.dw
@@ -63,6 +64,7 @@ class ContactHelper:
         dw.find_element_by_name("selected[]").click()
         dw.find_element_by_xpath("//input[@value='Delete']").click()
         dw.switch_to.alert.accept()
+        self.contact_cache = None
 
     def edit_first(self, contact):
         dw = self.app.dw
@@ -71,22 +73,27 @@ class ContactHelper:
         self.fill_form(contact)
         dw.find_element_by_name("update").click()
         self.return_to_home_page()
+        self.contact_cache = None
 
     def count(self):
         dw = self.app.dw
         self.open_home_page()
         return len(dw.find_elements_by_name("selected[]"))
 
+    contact_cache = None
+
     def get_contact_list(self):
-        dw = self.app.dw
-        self.open_home_page()
-        contacts = []
-        for element in dw.find_elements_by_xpath(
-                "//input[@name='selected[]']/parent::td/parent::tr"):
-            lastname = element.find_element_by_xpath(".//td[2]").text
-            firstname = element.find_element_by_xpath(".//td[3]").text
-            id = element.find_element_by_name("selected[]").get_attribute(
-                "value")
-            contacts.append(Contact(lastname=lastname, firstname=firstname,
-                                    id=id))
-        return contacts
+        if self.contact_cache is None:
+            dw = self.app.dw
+            self.open_home_page()
+            self.contact_cache = []
+            for element in dw.find_elements_by_xpath(
+                    "//input[@name='selected[]']/parent::td/parent::tr"):
+                lastname = element.find_element_by_xpath(".//td[2]").text
+                firstname = element.find_element_by_xpath(".//td[3]").text
+                id = element.find_element_by_name("selected[]").get_attribute(
+                    "value")
+                self.contact_cache.append(Contact(lastname=lastname,
+                                                  firstname=firstname,
+                                                  id=id))
+        return list(self.contact_cache)

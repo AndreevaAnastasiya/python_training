@@ -38,6 +38,7 @@ class GroupHelper:
         self.fill_form(group)
         dw.find_element_by_name("submit").click()
         self.return_to_groups_page()
+        self.group_cache = None
 
     def delete_first(self):
         dw = self.app.dw
@@ -45,6 +46,7 @@ class GroupHelper:
         self.select_first()
         dw.find_element_by_name("delete").click()
         self.return_to_groups_page()
+        self.group_cache = None
 
     def edit_first(self, group):
         dw = self.app.dw
@@ -54,19 +56,23 @@ class GroupHelper:
         self.fill_form(group)
         dw.find_element_by_name("update").click()
         self.return_to_groups_page()
+        self.group_cache = None
 
     def count(self):
         dw = self.app.dw
         self.open_group_page()
         return len(dw.find_elements_by_name("selected[]"))
 
+    group_cache = None
+
     def get_group_list(self):
-        dw = self.app.dw
-        self.open_group_page()
-        groups = []
-        for element in dw.find_elements_by_xpath("//span[@class='group']"):
-            text = element.text
-            id = element.find_element_by_name("selected[]").get_attribute(
-                "value")
-            groups.append(Group(name=text, id=id))
-        return groups
+        if self.group_cache is None:
+            dw = self.app.dw
+            self.open_group_page()
+            self.group_cache = []
+            for element in dw.find_elements_by_xpath("//span[@class='group']"):
+                text = element.text
+                id = element.find_element_by_name("selected[]").get_attribute(
+                    "value")
+                self.group_cache.append(Group(name=text, id=id))
+        return list(self.group_cache)
