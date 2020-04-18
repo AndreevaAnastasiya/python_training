@@ -104,11 +104,14 @@ class ContactHelper:
                 firstname = element.find_element_by_xpath(".//td[3]").text
                 id = element.find_element_by_name("selected[]").get_attribute(
                     "value")
-                all_phones = element.find_element_by_xpath(
-                    ".//td[6]").text
+                address = element.find_element_by_xpath(".//td[4]").text
+                all_phones = element.find_element_by_xpath(".//td[6]").text
+                all_emails = element.find_element_by_xpath(".//td[5]").text
                 self.contact_cache.append(Contact(lastname=lastname, id=id,
                                                   firstname=firstname,
-                                                  all_phones=all_phones))
+                                                  address=address,
+                                                  all_phones=all_phones,
+                                                  all_emails=all_emails))
         return list(self.contact_cache)
 
     def get_contact_from_edit(self, index):
@@ -121,8 +124,13 @@ class ContactHelper:
         work = dw.find_element_by_name("work").get_attribute("value")
         mobile = dw.find_element_by_name("mobile").get_attribute("value")
         phone2 = dw.find_element_by_name("phone2").get_attribute("value")
+        address = dw.find_element_by_name("address").get_attribute("value")
+        email = dw.find_element_by_name("email").get_attribute("value")
+        email2 = dw.find_element_by_name("email2").get_attribute("value")
+        email3 = dw.find_element_by_name("email3").get_attribute("value")
         return Contact(firstname=firstname, lastname=lastname, id=id, home=home,
-                       work=work, mobile=mobile, phone2=phone2)
+                       work=work, mobile=mobile, phone2=phone2, address=address,
+                       email=email, email2=email2, email3=email3)
 
     def get_contact_from_view(self, index):
         dw = self.app.dw
