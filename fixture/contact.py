@@ -68,14 +68,36 @@ class ContactHelper:
         dw.switch_to.alert.accept()
         self.contact_cache = None
 
+    def delete_by_id(self, id):
+        dw = self.app.dw
+        self.open_home_page()
+        dw.find_element_by_css_selector("input[value='%s']" % id).click()
+        dw.find_element_by_xpath("//input[@value='Delete']").click()
+        dw.switch_to.alert.accept()
+        dw.find_element_by_xpath("//div[@id='content']/div[@class='msgbox']")
+        self.contact_cache = None
+
     def open_to_edit_by_index(self, index):
         dw = self.app.dw
         self.open_home_page()
         dw.find_elements_by_xpath("//img[@title='Edit']")[index].click()
 
+    def open_to_edit_by_id(self, id):
+        dw = self.app.dw
+        self.open_home_page()
+        dw.find_element_by_css_selector("a[href='edit.php?id=%s']" % id).click()
+
     def edit_by_index(self, index, contact):
         dw = self.app.dw
         self.open_to_edit_by_index(index)
+        self.fill_form(contact)
+        dw.find_element_by_name("update").click()
+        self.return_to_home_page()
+        self.contact_cache = None
+
+    def edit_by_id(self, id, contact):
+        dw = self.app.dw
+        self.open_to_edit_by_id(id)
         self.fill_form(contact)
         dw.find_element_by_name("update").click()
         self.return_to_home_page()
