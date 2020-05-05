@@ -19,6 +19,9 @@ def test_add_contact_to_group(app):
     groups = db.get_group_list()
     group = random.choice(groups)
 
+    if contact in db.get_contacts_in_group(group):
+        contact = app.contact.create(Contact(firstname="J", lastname="D"))
+
     app.contact.add_contact_to_group(contact.id, group.id)
 
     contacts_in_group = db.get_contacts_in_group(group)
