@@ -4,7 +4,7 @@ from fixture.orm import ORMFixture
 import random
 
 
-def test_delete_contact_to_group(app):
+def test_delete_contact_from_group(app):
     db = ORMFixture(host="localhost", name="addressbook", user="root",
                     password="")
 
